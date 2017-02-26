@@ -4,17 +4,22 @@ fs = require('fs'),
   program = require('commander'),
   async = require('async'),
   request = require('request'),
-  chalk = require('chalk');
+  chalk = require('chalk'),
+  cheerio = require('cheerio');
 
 var parseFrontMatter = require('./js/front-matter.js'),
-  exportProductionCode = require('./js/export-production-code.js');
+  getData = require('./js/get-data.js')
+  exportProductionCode = require('./js/export-production-code.js'),
+  insertParagraphs = require('./js/insert-paragraphs.js'),
+  bindData = require('./js/bind-data.js');
 
 
 
 file = null,
   content = null,
   opts = {},
-  outputCode = null;
+  outputCode = null,
+  outputScripts = null;
 
 program.arguments('<filename>')
   .description('Concerts a Bynar markdown file to production-ready HTML/Javascript.')
@@ -49,6 +54,15 @@ program.arguments('<filename>')
       },
       // Handle front matter
       parseFrontMatter,
+      
+      // Build download scripts for live data
+      getData,
+      
+      // Insert paragraphs
+      insertParagraphs,
+      
+      // Bind data
+      bindData,
       
       // Export production code
       exportProductionCode
