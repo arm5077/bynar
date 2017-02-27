@@ -11,15 +11,18 @@ var parseFrontMatter = require('./js/front-matter.js'),
   getData = require('./js/get-data.js')
   exportProductionCode = require('./js/export-production-code.js'),
   insertParagraphs = require('./js/insert-paragraphs.js'),
-  bindData = require('./js/bind-data.js');
+  bindData = require('./js/bind-data.js'),
+  insertConditionals = require('./js/insert-conditionals.js'),
+  insertLoops = require('./js/insert-loops.js');
 
 
 
 file = null,
   content = null,
   opts = {},
-  outputCode = null,
-  outputScripts = null;
+  outputCode = "",
+  outputScripts = "",
+  outputScriptsAfterAJAX = null;
 
 program.arguments('<filename>')
   .description('Concerts a Bynar markdown file to production-ready HTML/Javascript.')
@@ -58,11 +61,23 @@ program.arguments('<filename>')
       // Build download scripts for live data
       getData,
       
+      // Add conditional statement tests
+      insertConditionals,
+      
+      // Add loops
+      insertLoops,
+      
       // Insert paragraphs
       insertParagraphs,
       
       // Bind data
       bindData,
+      
+      // Close out after-AJAX callback in scripts
+      function(callback){
+        outputScripts += '\n}'
+        callback();
+      },
       
       // Export production code
       exportProductionCode

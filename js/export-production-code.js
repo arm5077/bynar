@@ -1,7 +1,7 @@
 module.exports = function(callback){
   
   // Assign content of Bynar file to output code (this will almost certainly change or be moved)
-  outputCode = content;
+  outputCode = content + `\n\n<script type="text/javascript">${outputScripts}</script>`;
   
   // Check if the user specified a file to push output towards
   if(opts.outputFile){
